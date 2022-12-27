@@ -9,7 +9,7 @@ import java.util.function.Function;
 class CacheImpl<K, V extends CacheableEntry> implements Cache<K, CompletableFuture<V>> {
 
   private final ConcurrentHashMap<K, CompletableFuture<ValueBox<V>>> memoryMap = new ConcurrentHashMap<>();
-  Deque<K> keysMemory = new ConcurrentLinkedDeque<>();
+  private final Deque<K> keysMemory = new ConcurrentLinkedDeque<>();
   private final Function<K, CompletableFuture<V>> loader;
   private final int sizeLimit;
 
