@@ -7,7 +7,7 @@ public class MonoCacheAdapter<K extends Comparable<K>,V extends CacheableEntry> 
   final CacheImpl<K,V> cache;
 
   public MonoCacheAdapter(int size, int ttlMillis, Function<K, Mono<V>> loader) {
-    this.cache = new CacheImpl<K,V>(size,ttlMillis, k->loader.apply(k).toFuture());
+    this.cache = new CacheImpl<>(size,ttlMillis, k->loader.apply(k).toFuture());
   }
 
   @Override
