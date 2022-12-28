@@ -42,16 +42,16 @@ class CacheImpl<K extends Comparable<K>, V extends CacheableEntry> implements Ca
 
   private CompletableFuture<V> fromResource(K key, CompletableFuture<ValueBox<V>> oldValue) {
     return this.loader.apply(key)
-        .thenCompose(v -> {
+        .thenApply(v -> {
           final var vbox = new ValueBox<>(v, System.currentTimeMillis());
           if (v.allowedToCache()) {
             this.memorize(key, CompletableFuture.completedFuture(vbox));
           } else {
             if (oldValue != null) {
-              return oldValue;
+              return oldValue.join();
             }
           }
-          return CompletableFuture.supplyAsync(() -> vbox);
+          return  vbox;
         }).thenApply(ValueBox::value);
   }
 
