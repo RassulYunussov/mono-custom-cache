@@ -4,18 +4,21 @@ import java.util.Deque;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
 
-class CacheImpl<K, V extends CacheableEntry> implements Cache<K, CompletableFuture<V>> {
+class CacheImpl<K extends Comparable<K>, V extends CacheableEntry> implements Cache<K, CompletableFuture<V>> {
 
-  private final ConcurrentHashMap<K, CompletableFuture<ValueBox<V>>> memoryMap = new ConcurrentHashMap<>();
-  private final Deque<K> keysMemory = new ConcurrentLinkedDeque<>();
+  private final ConcurrentMap<K, CompletableFuture<ValueBox<V>>> memoryMap;
+  private final Deque<K> keysMemory;
   private final Function<K, CompletableFuture<V>> loader;
   private final int sizeLimit;
 
   private final int ttlMillis;
 
   public CacheImpl(int sizeLimit, int ttlMillis, Function<K, CompletableFuture<V>> loader) {
+    this.memoryMap = new ConcurrentHashMap<>(sizeLimit);
+    this.keysMemory = new ConcurrentLinkedDeque<>();
     this.sizeLimit = sizeLimit;
     this.loader = loader;
     this.ttlMillis = ttlMillis;

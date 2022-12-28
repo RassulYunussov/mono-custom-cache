@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 class CustomcacheApplicationTests {
 
 	@Test
-	void caheRoutine() {
+	void cacheRoutine() {
 		final var ss = new SomeService();
 
 		final var func = new Function<String, Mono<SomeData>>() {

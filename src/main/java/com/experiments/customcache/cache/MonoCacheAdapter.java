@@ -3,7 +3,7 @@ package com.experiments.customcache.cache;
 import java.util.function.Function;
 import reactor.core.publisher.Mono;
 
-public class MonoCacheAdapter<K,V extends CacheableEntry> implements Cache<K,Mono<V>>{
+public class MonoCacheAdapter<K extends Comparable<K>,V extends CacheableEntry> implements Cache<K,Mono<V>>{
   final CacheImpl<K,V> cache;
 
   public MonoCacheAdapter(int size, int ttlMillis, Function<K, Mono<V>> loader) {
